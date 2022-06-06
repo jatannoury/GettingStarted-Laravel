@@ -45,22 +45,34 @@ class AllControllers extends Controller
     }
 
     public function setGroups(){
-        $all_students=["toni","joseph","aya","hamza","batoul","hoda"];
+        $all_students=["toni","joseph","aya","hamza","batoul","hoda","Tarek"];
         $groups=[];
-        while ($all_students){
-            if (count($all_students)==1){
-                array_push($groups,[$all_students[0]]);
-                break;
-            }
-            print(count($all_students));
-            $rand_int1=rand(0,count($all_students)-2);
-            $rand_int2=rand(0,count($all_students)-2);
-            $group=[$all_students[$rand_int1],$all_students[$rand_int2]];
-            array_push($groups,$group);
-            unset($all_students[$rand_int1]);
-            unset($all_students[$rand_int2-1]);
+        if (count($all_students)%2!=0){
+            array_push($groups,[$all_students[count($all_students)-1]]);
+            array_pop($all_students);
         }
+        for ($i=0; $i<count($all_students);$i+=2){
+            $curr_group=[$all_students[$i],$all_students[$i+1]];
+            array_push($groups,$curr_group);
+        }
+            
         return $groups;
+        
+    }
+
+    public function randomNominee(){
+        $students=["toni","joseph","aya","hamza","batoul","hoda","Tarek"];
+        $pick=rand(0,count($students)+5);
+        if ($pick<count($students)){
+            return $students[$pick];
+        }
+        return "Pablo";
+    }
+
+    public function randomRecipe(){
+        $object= file_get_contents("https://api.punkapi.com/v2/beers");
+        $object=json_decode($object, true);
+        return $object[rand(0,count($object)-1)]["ingredients"];
     }
 
 
